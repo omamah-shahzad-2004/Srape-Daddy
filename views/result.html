@@ -51,17 +51,55 @@
         .back-button:hover {
             background-color: #0056b3;
         }
+
+        footer {
+            background-color: #2c3e50;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+        }
+        footer .social-links a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 1.2em;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        footer .social-links a:hover {
+            color: #3ce778;
+        }
+
+        
     </style>
 </head>
 <body>
     <div class="container">
-        <h1><%= data.title %></h1>
-        <img src="<%= data.image %>" alt="Recipe Image">
+        <h1 id="title">Loading...</h1>
+        <img id="image" src="" alt="Recipe Image">
         <div class="ingredients">
             <h2>Ingredients</h2>
-            <p><%= data.ingredients %></p>
+            <p id="ingredients">Loading...</p>
         </div>
         <a href="/" class="back-button">Back</a>
     </div>
+
+
+
+    <script>
+        // Fetch the scraped data and display it
+        fetch('/scrapedData.json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('title').textContent = data.title;
+                document.getElementById('image').src = data.image;
+                document.getElementById('ingredients').textContent = data.ingredients;
+            })
+            .catch(error => {
+                console.error('Error fetching scraped data:', error);
+                document.getElementById('title').textContent = 'Error loading data';
+                document.getElementById('ingredients').textContent = 'Error loading data';
+            });
+    </script>
 </body>
 </html>
