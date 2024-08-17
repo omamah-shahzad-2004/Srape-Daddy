@@ -1,4 +1,4 @@
-import clientPromise from './lib/mongodb';
+const clientPromise = require('./mongodb.js');
 
 //Function to connect to MongoDB and store scrapped data in it
 async function storeInDB(scrapped_data) {
@@ -19,3 +19,4 @@ async function storeInDB(scrapped_data) {
         await client.close();
     }
 }
+
