@@ -1,4 +1,7 @@
-import clientPromise from './lib/mongodb';
+const clientPromise = require('./mongodb');
+
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 //Function to connect to MongoDB and store scrapped data in it
 async function storeInDB(scrapped_data) {
