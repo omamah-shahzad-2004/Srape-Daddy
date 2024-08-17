@@ -1,9 +1,21 @@
 {
   "dependencies": {
-    "axios": "^1.7.4",
-    "cheerio": "^1.0.0",
     "dotenv": "^16.4.5",
     "mongodb": "^6.8.0",
-    "node": "^22.6.0"
-  }
+    "node": "^22.6.0",
+    "puppeteer": "^23.1.0"
+  },
+  "name": "web-scrapper",
+  "version": "1.0.0",
+  "main": "mongodb.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
