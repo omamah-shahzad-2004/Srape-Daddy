@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraping Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2em;
+            margin-top: 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .ingredients {
+            margin-top: 20px;
+        }
+        .ingredients h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .ingredients p {
+            margin: 0;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1em;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><%= data.title %></h1>
+        <img src="<%= data.image %>" alt="Recipe Image">
+        <div class="ingredients">
+            <h2>Ingredients</h2>
+            <p><%= data.ingredients %></p>
+        </div>
+        <a href="/" class="back-button">Back</a>
+    </div>
+</body>
+</html>
