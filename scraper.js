@@ -5,29 +5,34 @@ async function scrape(url) {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
 
-        // Extend navigation timeout
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 }); // 60 seconds timeout
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
-        // Extract title
-        const title = await page.$eval('h1', el => el.textContent.trim()).catch(() => 'Title not found');
+        // Extract headings
+        const headings = await page.evaluate(() => {
+            return Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6')).map(el => el.textContent.trim());
+        }).catch(() => []);
 
-        // Extract image URL
-        const image = await page.$eval('img', img => img.getAttribute('data-src') || img.src).catch(() => 'Image URL not found');
+        // Extract paragraphs
+        const paragraphs = await page.evaluate(() => {
+            return Array.from(document.querySelectorAll('p')).map(p => p.textContent.trim());
+        }).catch(() => []);
 
-        // Extract ingredients
-        const ingredients = await page.evaluate(() => {
-            const ingredientsList = document.querySelector('#mm-recipes-structured-ingredients_1-0 .mm-recipes-structured-ingredients__list');
-            if (!ingredientsList) return 'Ingredients list not found';
-            return Array.from(ingredientsList.querySelectorAll('li')).map(li => li.textContent.trim()).join(', ') || 'Ingredients not found';
-        }).catch(() => 'Ingredients not found');
+        // Extract links
+        const links = await page.evaluate(() => {
+            return Array.from(document.querySelectorAll('a')).map(a => {
+                return {
+                    href: a.href,
+                    text: a.textContent.trim()
+                };
+            });
+        }).catch(() => []);
 
-        // Return the scraped data
-        const data = { title, image, ingredients };
         await browser.close();
-        return data;
+
+        return { headings, paragraphs, links };
     } catch (error) {
         console.error('Error occurred while scraping:', error);
-        return { title: 'Error', image: '', ingredients: 'Error occurred while scraping' };
+        return { headings: [], paragraphs: [], links: [] };
     }
 }
 
