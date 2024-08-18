@@ -27,7 +27,6 @@ async function scrapeWebPage(url) {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
 
-<<<<<<< HEAD
         // Extend navigation timeout
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
