@@ -55,14 +55,14 @@
             margin-top: 20px;
             padding: 10px 20px;
             border-radius: 4px;
-            background-color: #007bff;
+            background-color: #28a745;
             color: #fff;
             text-decoration: none;
             font-size: 1em;
         }
 
         .back-button:hover {
-            background-color: #0056b3;
+            background-color: #218838;
         }
 
         footer {
@@ -116,7 +116,7 @@
             .then(data => {
                 // Handle headings
                 const headingsList = document.getElementById('headings');
-                headingsList.innerHTML = '';  
+                headingsList.innerHTML = '';
                 data.headings.forEach(heading => {
                     const li = document.createElement('li');
                     li.textContent = heading;
@@ -125,7 +125,7 @@
 
                 // Handle paragraphs
                 const paragraphsDiv = document.getElementById('paragraphs');
-                paragraphsDiv.innerHTML = '';  
+                paragraphsDiv.innerHTML = '';
                 data.paragraphs.forEach(paragraph => {
                     const p = document.createElement('p');
                     p.textContent = paragraph;
@@ -134,7 +134,7 @@
 
                 // Handle links
                 const linksList = document.getElementById('links');
-                linksList.innerHTML = '';  
+                linksList.innerHTML = '';
                 data.links.forEach(link => {
                     const li = document.createElement('li');
                     const a = document.createElement('a');
