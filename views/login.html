@@ -19,28 +19,37 @@
             color: #ffffff;
         }
         nav {
-            background-color: #2c3e50;
-            padding: 15px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
+            background-color: #fff;
+            padding: 1rem;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             position: fixed;
+            width: 100vw;
             top: 0;
             left: 0;
             z-index: 1000;
         }
+        nav .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            text-decoration: none;
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+        }
         nav .nav-links {
             list-style: none;
-            margin: 0;
-            padding: 0;
             display: flex;
+            margin-right: 15px;
         }
         nav .nav-links li {
             margin-left: 20px;
         }
         nav .nav-links li a {
-            color: #fff;
+            color: #333;
             text-decoration: none;
             font-size: 1em;
             transition: color 0.3s;
@@ -73,8 +82,8 @@
         }
         .login-container button {
             padding: 15px 30px;
-            background-color: #007bff;
-            color: #fff;
+            background-color: #3ce778;
+            color: #2c3e50;
             border: none;
             border-radius: 25px;
             font-size: 1.2em;
@@ -83,7 +92,7 @@
             transition: background-color 0.3s, transform 0.3s;
         }
         .login-container button:hover {
-            background-color: #0056b3;
+            background-color: #32b367;
             transform: translateY(-5px);
         }
         .error-message {
@@ -95,13 +104,22 @@
 </head>
 <body>
 
-<nav>
-    <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/register">Register</a></li>
-    </ul>
-</nav>
+    <nav>
+        <a href="/" class="brand">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
+                <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg>ScrapeDaddy
+        </a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/landing">Input URL</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+
+        </ul>
+    </nav>
 
 <div class="login-container">
     <h2>Login</h2>
