@@ -1,8 +1,12 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const scrape = require('./scraper'); // Import the scrape function from scraper.js
+
+const scrapeWebPage = require('./scraper'); // Import the scrapeWebPage function from scraper.js
+const clientPromise = require('./mongodb.js'); // Import the MongoDB connection
+
 const app = express();
+
 const port = 3000;
 
 // Middleware to parse form data
@@ -34,10 +38,7 @@ app.post('/scrape', async (req, res) => {
 
     try {
         // Perform the actual scraping
-        const data = await scrape(url);
-
-        // Save the scraped data to a JSON file
-        fs.writeFileSync('scrapedData.json', JSON.stringify(data, null, 2));
+        await scrapeWebPage(url);
 
         // Redirect to the result page after scraping
         res.redirect('/result');
@@ -52,9 +53,30 @@ app.get('/result', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'result.html'));  // Serve the result.html file
 });
 
-// Serve the scrapedData.json file
-app.get('/scrapedData.json', (req, res) => {
-    res.sendFile(path.join(__dirname, 'scrapedData.json'));
+// New API endpoint to fetch the latest scraped data
+app.get('/api/scraped-data', async (req, res) => {
+    const client = await clientPromise;
+
+    try {
+        await client.connect();
+        const db = client.db("scrappedInfo");
+        const collection = db.collection("webInfo");
+
+        // Fetch the latest scraped data
+        const latestData = await collection.findOne({}, { sort: { date: -1 } });
+
+        if (!latestData) {
+            return res.status(404).send('No scraped data found.');
+        }
+
+        // Send the latest data as JSON
+        res.json(latestData);
+    } catch (error) {
+        console.error('Error fetching the data:', error);
+        res.status(500).send('An error occurred while fetching the data.');
+    } finally {
+        await client.close();
+    }
 });
 
 app.listen(port, () => {

@@ -1,34 +1,83 @@
+const clientPromise = require('./mongodb.js');
 const puppeteer = require('puppeteer');
 
-async function scrape(url) {
+// Function to connect to MongoDB and store scrapped data in it
+async function storeInDB(scrapedData) {
+    const client = await clientPromise;
+
+    try {
+        await client.connect();
+        console.log("Connected to MongoDB Atlas");
+
+        const db = client.db("scrappedInfo");
+        const collection = db.collection("webInfo");
+
+        const res = await collection.insertOne(scrapedData);
+        console.log(`New document inserted with _id: ${res.insertedId}`);
+    } catch (error) {
+        console.error("Error connecting to MongoDB Atlas:", error);
+    } finally {
+        await client.close();
+    }
+}
+
+// Function to scrape the web page
+async function scrapeWebPage(url) {
     try {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
 
         // Extend navigation timeout
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 }); // 60 seconds timeout
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
         // Extract title
         const title = await page.$eval('h1', el => el.textContent.trim()).catch(() => 'Title not found');
+        console.log('Title:', title);
 
         // Extract image URL
         const image = await page.$eval('img', img => img.getAttribute('data-src') || img.src).catch(() => 'Image URL not found');
+        console.log('Image URL:', image);
 
-        // Extract ingredients
-        const ingredients = await page.evaluate(() => {
-            const ingredientsList = document.querySelector('#mm-recipes-structured-ingredients_1-0 .mm-recipes-structured-ingredients__list');
-            if (!ingredientsList) return 'Ingredients list not found';
-            return Array.from(ingredientsList.querySelectorAll('li')).map(li => li.textContent.trim()).join(', ') || 'Ingredients not found';
-        }).catch(() => 'Ingredients not found');
+        // Extract headings
+        const headings = await page.evaluate(() => {
+            return Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6')).map(heading => heading.textContent.trim());
+        }).catch(() => 'Headings not found');
+        console.log('Headings:', headings);
 
-        // Return the scraped data
-        const data = { title, image, ingredients };
+        // Extract paragraphs
+        const paragraphs = await page.evaluate(() => {
+            return Array.from(document.querySelectorAll('p')).map(p => p.textContent.trim());
+        }).catch(() => 'Paragraphs not found');
+        console.log('Paragraphs:', paragraphs);
+
+        // Extract links
+        const links = await page.evaluate(() => {
+            return Array.from(document.querySelectorAll('a')).map(a => a.href);
+        }).catch(() => 'Links not found');
+        console.log('Links:', links);
+
+        // Create a data object to store in MongoDB
+        const scrapedData = {
+            url,
+            title,
+            image,
+            headings,
+            paragraphs,
+            links,
+            date: new Date(),
+        };
+
+        // Save the data to the database
+        await storeInDB(scrapedData);
+
         await browser.close();
-        return data;
     } catch (error) {
-        console.error('Error occurred while scraping:', error);
-        return { title: 'Error', image: '', ingredients: 'Error occurred while scraping' };
+        if (error.response && error.response.status === 404) {
+            console.error("Page not found (404):", url);
+        } else {
+            console.error('Error fetching the webpage:', error.message);
+        }
     }
 }
 
-module.exports = scrape;
+module.exports = scrapeWebPage;

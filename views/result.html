@@ -84,21 +84,41 @@
         <a href="/" class="back-button">Back</a>
     </div>
 
-
-
     <script>
-        // Fetch the scraped data and display it
-        fetch('/scrapedData.json')
+        // Fetch the latest scraped data from the API
+        fetch('/api/scraped-data')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('title').textContent = data.title;
                 document.getElementById('image').src = data.image;
-                document.getElementById('ingredients').textContent = data.ingredients;
+
+                const headingsList = document.getElementById('headings-list');
+                data.headings.forEach(heading => {
+                    const li = document.createElement('li');
+                    li.textContent = heading;
+                    headingsList.appendChild(li);
+                });
+
+                const paragraphsList = document.getElementById('paragraphs-list');
+                data.paragraphs.forEach(paragraph => {
+                    const li = document.createElement('li');
+                    li.textContent = paragraph;
+                    paragraphsList.appendChild(li);
+                });
+
+                const linksList = document.getElementById('links-list');
+                data.links.forEach(link => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = link;
+                    a.textContent = link;
+                    li.appendChild(a);
+                    linksList.appendChild(li);
+                });
             })
             .catch(error => {
                 console.error('Error fetching scraped data:', error);
                 document.getElementById('title').textContent = 'Error loading data';
-                document.getElementById('ingredients').textContent = 'Error loading data';
             });
     </script>
 </body>
