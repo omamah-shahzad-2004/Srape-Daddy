@@ -77,7 +77,7 @@ async function scrapeWebPage(url) {
         } else {
             console.error('Error fetching the webpage:', error.message);
         }
-=======
+        
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
         // Extract headings
@@ -106,7 +106,6 @@ async function scrapeWebPage(url) {
     } catch (error) {
         console.error('Error occurred while scraping:', error);
         return { headings: [], paragraphs: [], links: [] };
->>>>>>> 5f5b715515528f6b9546084bb1f399ba77ce5717
     }
 }
 
