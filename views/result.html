@@ -108,31 +108,33 @@
 
         <a href="/" class="back-button">Back</a>
     </div>
-<<<<<<< HEAD
 
     <script>
         // Fetch the latest scraped data from the API
         fetch('/api/scraped-data')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('title').textContent = data.title;
-                document.getElementById('image').src = data.image;
-
-                const headingsList = document.getElementById('headings-list');
+                // Handle headings
+                const headingsList = document.getElementById('headings');
+                headingsList.innerHTML = '';  // Clear "Loading..." text
                 data.headings.forEach(heading => {
                     const li = document.createElement('li');
                     li.textContent = heading;
                     headingsList.appendChild(li);
                 });
 
-                const paragraphsList = document.getElementById('paragraphs-list');
+                // Handle paragraphs
+                const paragraphsDiv = document.getElementById('paragraphs');
+                paragraphsDiv.innerHTML = '';  // Clear "Loading..." text
                 data.paragraphs.forEach(paragraph => {
-                    const li = document.createElement('li');
-                    li.textContent = paragraph;
-                    paragraphsList.appendChild(li);
+                    const p = document.createElement('p');
+                    p.textContent = paragraph;
+                    paragraphsDiv.appendChild(p);
                 });
 
-                const linksList = document.getElementById('links-list');
+                // Handle links
+                const linksList = document.getElementById('links');
+                linksList.innerHTML = '';  // Clear "Loading..." text
                 data.links.forEach(link => {
                     const li = document.createElement('li');
                     const a = document.createElement('a');
@@ -144,79 +146,9 @@
             })
             .catch(error => {
                 console.error('Error fetching scraped data:', error);
-                document.getElementById('title').textContent = 'Error loading data';
-=======
-    <script>
-        // Fetch the scraped data and display it
-        fetch('../scrapedData.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Scraped data:', data); // Debugging line
-
-                // Handle headings
-                const headingsList = document.getElementById('headings');
-                headingsList.innerHTML = '';
-                if (Array.isArray(data.headings)) {
-                    data.headings.forEach(heading => {
-                        const li = document.createElement('li');
-                        li.textContent = heading;
-                        headingsList.appendChild(li);
-                    });
-                } else {
-                    headingsList.textContent = 'No headings found';
-                }
-
-                // Handle paragraphs
-                const paragraphsDiv = document.getElementById('paragraphs');
-                paragraphsDiv.innerHTML = '';
-                if (Array.isArray(data.paragraphs)) {
-                    data.paragraphs.forEach(paragraph => {
-                        const p = document.createElement('p');
-                        p.textContent = paragraph;
-                        paragraphsDiv.appendChild(p);
-                    });
-                } else {
-                    paragraphsDiv.textContent = 'No paragraphs found';
-                }
-
-                // Handle links
-                const linksList = document.getElementById('links');
-                linksList.innerHTML = '';
-                if (Array.isArray(data.links)) {
-                    // Use a Set to filter out duplicate links
-                    const uniqueLinks = new Set();
-                    data.links.forEach(link => {
-                        // Skip links without text
-                        if (link.text && link.text.trim()) {
-                            // Check for uniqueness and add
-                            const linkString = link.href + '|' + link.text;
-                            if (!uniqueLinks.has(linkString)) {
-                                uniqueLinks.add(linkString);
-                                const li = document.createElement('li');
-                                const a = document.createElement('a');
-                                a.textContent = link.text;
-                                a.href = link.href;
-                                a.target = '_blank';
-                                li.appendChild(a);
-                                linksList.appendChild(li);
-                            }
-                        }
-                    });
-                } else {
-                    linksList.textContent = 'No links found';
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching scraped data:', error);
                 document.getElementById('headings').textContent = 'Error loading data';
                 document.getElementById('paragraphs').textContent = 'Error loading data';
                 document.getElementById('links').textContent = 'Error loading data';
->>>>>>> 5f5b715515528f6b9546084bb1f399ba77ce5717
             });
     </script>
 </body>
